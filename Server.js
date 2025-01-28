@@ -59,7 +59,7 @@ app.get('/products/:id', (req, res) => {
 
 //5
 
-const news = [
+let news = [
   { id: 1, title: 'Tech Innovation', category: 'Technology' },
   { id: 2, title: 'AI Advances', category: 'Technology' },
   { id: 3, title: 'Global Economy Updates', category: 'Business' },
@@ -76,4 +76,7 @@ app.get('/news/', (req, res) => {
   res.send(news)
 }) 
 
-app.listen(3000, () => console.log('Server is running port 3001'))
+// 6
+
+
+app.listen(3000, () => console.log('Server is running port 3000'))
