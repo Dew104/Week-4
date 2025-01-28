@@ -78,5 +78,14 @@ app.get('/news/', (req, res) => {
 
 // 6
 
+app.get('/news/:category', (req, res) => {
+  const filteredNews = news.filter((item) => item.category === req.params.category); 
+
+  if (filteredNews.length === 0) {
+      res.status(404).json({ message: "No news found in this category" }); 
+  } else {
+      res.json(filteredNews); 
+  }
+});
 
 app.listen(3000, () => console.log('Server is running port 3000'))
