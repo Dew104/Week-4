@@ -4,29 +4,31 @@ const app = express();
 
 // 1
 let users = [
-    { id: 1, name: 'John Doe', email: 'john@example.com' },
-    { id: 2, name: 'James Willson', email: 'james@example.com' },
-    { id: 3, name: 'Jenny Car', email: 'jenny@example.com' },
-    { id: 4, name: 'Peter G', email: 'peter@example.com' },
-    { id: 5, name: 'Glenn Q', email: 'glenn@example.com' },
-    { id: 6, name: 'Joe S', email: 'joe@example.com' },
-    { id: 7, name: 'Homer S', email: 'homer@example.com' },
-    { id: 8, name: 'Bart S', email: 'bart@example.com' },
-    { id: 9, name: 'Guest', email: 'guest@example.com' },
-    { id: 10, name: 'Jane Smith', email: 'jane@example.com' },
-    ]
-
+  { id: 1, name: 'John Doe', email: 'john@example.com' },
+  { id: 2, name: 'Jane Smith', email: 'jane@another.com' },
+  { id: 3, name: 'Mike Brown', email: 'mike@example.com' },
+  { id: 4, name: 'Emily Davis', email: 'emily@example.com' },
+  { id: 5, name: 'Sarah Wilson', email: 'sarah@another.com' },
+  { id: 6, name: 'James Taylor', email: 'james@example.com' },
+  { id: 7, name: 'Robert Moore', email: 'robert@another.com' },
+  { id: 8, name: 'Laura Johnson', email: 'laura@example.com' },
+  { id: 9, name: 'Kevin Lee', email: 'kevin@another.com' },
+  { id: 10, name: 'Sophia Walker', email: 'sophia@example.com' },
+]
+    app.get('/users/', (req, res) => {
+      res.send(users)
+    })
 //2
 
-app.get('/users/:id', (req, res) => {
-    let l;
-    if (undefined == users.find((users) => users.id == req.params.id )) {
-        l = {massage: "User not found"}
-    } else {
-    l = (users.find((users) => users.id == req.params.id))
-    }
-    res.json(l)
-  })
+// app.get('/users/:id', (req, res) => {
+//     let l;
+//     if (undefined == users.find((users) => users.id == req.params.id )) {
+//         l = {massage: "User not found"}
+//     } else {
+//     l = (users.find((users) => users.id == req.params.id))
+//     }
+//     res.json(l)
+//   })
 
   //3
 
@@ -47,15 +49,15 @@ app.get('/products/', (req, res) => {
 })
 
  //4
-app.get('/products/:id', (req, res) => {
-    let p;
-    if (undefined == products.find((item) => item.id === Number(req.params.id))) {
-      p = { message: "Products not found" }
-    } else {
-      p = products.find((item) => item.id == Number(req.params.id))
-    }
-    res.json(p);
-  })
+// app.get('/products/:id', (req, res) => {
+//     let p;
+//     if (undefined == products.find((item) => item.id === Number(req.params.id))) {
+//       p = { message: "Products not found" }
+//     } else {
+//       p = products.find((item) => item.id == Number(req.params.id))
+//     }
+//     res.json(p);
+//   })
 
 //5
 
@@ -88,4 +90,119 @@ app.get('/news/:category', (req, res) => {
   }
 });
 
-app.listen(3000, () => console.log('Server is running port 3000'))
+//7 
+
+const events = [
+  { id: 1, name: 'Tech Conference', location: 'Bangkok', date: '2025-02-15' },
+  { id: 2, name: 'Art Exhibition', location: 'Chiang Mai', date: '2025-03-10' },
+  { id: 3, name: 'Music Festival', location: 'Bangkok', date: '2025-02-20' },
+  { id: 4, name: 'Startup Workshop', location: 'Phuket', date: '2025-04-05' },
+  { id: 5, name: 'Gaming Expo', location: 'Bangkok', date: '2025-05-18' },
+  { id: 6, name: 'Cultural Fair', location: 'Chiang Mai', date: '2025-06-25' },
+  { id: 7, name: 'Food Festival', location: 'Pattaya', date: '2025-07-10' },
+  { id: 8, name: 'Marathon Event', location: 'Bangkok', date: '2025-08-20' },
+  { id: 9, name: 'Book Fair', location: 'Bangkok', date: '2025-09-15' },
+  { id: 10, name: 'Photography Workshop', location: 'Phuket', date: '2025-10-05' }
+];
+app.get('/events/', (req, res) => {
+  res.send(events)
+}) 
+
+
+//8
+
+// app.get('/events/:id', (req, res) => {
+//   let e;
+//   if (undefined == events.find((events) => events.id === Number(req.params.id))) {
+//     e = { message: "Event not found" }
+//   } else {
+//     e = events.find((events) => events.id == Number(req.params.id))
+//   }
+//   res.json(e);
+// })
+
+//9
+
+app.get('/users/filter', (req, res) => {
+  const domain = req.query.domain; 
+  if (!domain) {
+      return res.status(400).json({ message: "Please provide a domain query parameter" });
+  }
+
+  const filteredUsers = users.filter(user => user.email.endsWith(`@${domain}`));
+
+  if (filteredUsers.length === 0) {
+      res.status(404).json({ message: "No users found with this domain" });
+  } else {
+      res.json(filteredUsers);
+  }
+});
+
+// 10
+
+app.get('/products/searchByName', (req, res) => {
+  const query = req.query.name; 
+  if (!query) {
+      return res.status(400).json({ message: "Please provide a name query parameter" });
+  }
+
+  const filteredProducts = products.filter(product =>
+      product.name.toLowerCase().includes(query.toLowerCase())
+  );
+
+  if (filteredProducts.length === 0) {
+      res.status(404).json({ message: "No products found with the given name" });
+  } else {
+      res.json(filteredProducts);
+  }
+});
+
+// 11
+
+app.get('/products/search', (req, res) => {
+  const { name, minPrice, maxPrice } = req.query; 
+
+  let filteredProducts = products;
+
+  if (name) {
+      filteredProducts = filteredProducts.filter(product =>
+          product.name.toLowerCase().includes(name.toLowerCase())
+      );
+  }
+
+  if (minPrice) {
+      filteredProducts = filteredProducts.filter(product => product.price >= Number(minPrice));
+  }
+  if (maxPrice) {
+      filteredProducts = filteredProducts.filter(product => product.price <= Number(maxPrice));
+  }
+
+  if (filteredProducts.length === 0) {
+      res.status(404).json({ message: "No products found with the given criteria" });
+  } else {
+      res.json(filteredProducts);
+  }
+});
+
+// 12
+
+app.get('/events/search', (req, res) => {
+  const { location, startDate, endDate } = req.query;
+
+  if (!location || !startDate || !endDate) {
+      return res.status(400).json({ message: "Please provide location, startDate, and endDate" });
+  }
+
+  const filteredEvents = events.filter(event => 
+      event.location.toLowerCase() === location.toLowerCase() &&
+      new Date(event.date) >= new Date(startDate) &&
+      new Date(event.date) <= new Date(endDate)
+  );
+
+  if (filteredEvents.length === 0) {
+      res.status(404).json({ message: "No events found matching the criteria" });
+  } else {
+      res.json(filteredEvents);
+  }
+});
+app.listen(3001, () => console.log('Server is running port 3001'))
